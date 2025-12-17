@@ -198,12 +198,12 @@ def run_ingest(run_id: str, base_path: str) -> Dict[str, str]:
                 _build_item(
                     source=source,
                     suffix=idx,
-                    title=str(payload["title"]),
-                    url=str(payload["url"]),
-                    summary=str(payload["summary"]),
-                    published_at=str(payload["published_at"]),
-                    tags=list(payload.get("tags", [])),
-                    raw_ref=str(payload["raw_ref"]),
+                    title=payload["title"],
+                    url=payload["url"],
+                    summary=payload["summary"],
+                    published_at=payload["published_at"],
+                    tags=payload.get("tags", []),
+                    raw_ref=payload["raw_ref"],
                 )
             )
 
