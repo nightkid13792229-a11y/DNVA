@@ -11,6 +11,13 @@ from datetime import datetime
 import random
 import json
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+if PARENT_DIR not in sys.path:
+    sys.path.insert(0, PARENT_DIR)
+
+from dnva.core import ingest as ingest_core
+
 
 def generate_run_id():
     """Generate unique run_id with timestamp + random suffix"""
@@ -45,25 +52,16 @@ def write_placeholder(path, content):
 
 
 def run_ingest(run_id):
-    """Placeholder for ingest step"""
+    """Execute ingest step"""
     print(f"[INGEST] Starting ingest step for run_id: {run_id}")
     
     base_path = create_run_directories(run_id)
-    ingest_path = os.path.join(base_path, "ingest")
+    result = ingest_core.run_ingest(run_id, base_path)
     
-    # Create placeholder file
-    placeholder = {
-        "run_id": run_id,
-        "step": "INGEST",
-        "created_at": datetime.now().isoformat(),
-        "status": "placeholder",
-        "note": "This is a placeholder for PR-0. Real implementation in PR-1."
-    }
-    
-    write_placeholder(os.path.join(ingest_path, "placeholder.json"), placeholder)
-    
-    print(f"[INGEST] Created directory: {ingest_path}")
-    print(f"[INGEST] Wrote placeholder file")
+    print(f"[INGEST] Created directory: {os.path.join(base_path, 'ingest')}")
+    print(f"[INGEST] Wrote items to: {result['items_path']}")
+    print(f"[INGEST] Wrote sources to: {result['sources_path']}")
+    print(f"[INGEST] Items count: {result['item_count']}")
     print(f"[INGEST] Run ID: {run_id}")
     return run_id
 
